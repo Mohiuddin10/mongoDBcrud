@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 
 app.use(cors());
@@ -36,6 +36,33 @@ async function run() {
       const userData = req.body;
       console.log('new user: ', userData);
       const result = await userCollection.insertOne(userData);
+      res.send(result);
+    })
+
+
+    // show data 
+    app.get('/users', async(req, res) => {
+      const result = await userCollection.find().toArray();
+      console.log(result);
+      res.send(result);
+    })
+
+    // find a single data for update 
+    app.get('/users/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const user = await userCollection.findOne(query);
+      res.send(user);
+    })
+
+    // delete single user 
+    app.delete('/users/:id', async(req, res) => {
+      const id = req.params.id;
+      console.log('id: ', id);
+      const query = {
+        _id: new ObjectId(id),
+      };
+      const result = await userCollection.deleteOne(query);
       res.send(result);
     })
 
