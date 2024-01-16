@@ -55,6 +55,10 @@ async function run() {
       res.send(user);
     })
 
+    app.put('/users/:id', async(req, res) =>{
+      
+    })
+
     // delete single user 
     app.delete('/users/:id', async(req, res) => {
       const id = req.params.id;
